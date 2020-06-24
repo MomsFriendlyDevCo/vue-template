@@ -4,7 +4,11 @@
   "description": "Compile a simple HTML string via Vue style templates",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MomsFriendlyDevCo/vue-template.git"
   },
   "keywords": [
     "vue",
@@ -13,6 +17,10 @@
   ],
   "author": "Matt Carter <m@ttcarter.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MomsFriendlyDevCo/vue-template/issues"
+  },
+  "homepage": "https://github.com/MomsFriendlyDevCo/vue-template#readme",
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^8.0.1"
