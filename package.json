@@ -1,0 +1,24 @@
+{
+  "name": "@momsfriendlydevco/vue-template",
+  "version": "0.0.0",
+  "description": "Compile a simple HTML string via Vue style templates",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vue",
+    "template",
+    "templator"
+  ],
+  "author": "Matt Carter <m@ttcarter.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "vue-template-compiler": "^2.6.11"
+  }
+}
