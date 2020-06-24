@@ -13,6 +13,45 @@ template({name: 'Joe'}); //= "<div>Hello Joe</div>"
 template({name: 'Jane'}); //= "<div>Hello Jane</div>"
 ```
 
+All built in Vue directives are supported:
+
+
+
+```javascript
+var vueTemplate = require('@momsfriendlydevco/vue-template');
+
+var template = vueTemplate(`
+	<body>
+		<p>Hello {{user.name.first}} {{user.name.last}}</p>
+		<p>
+			Your favourite color
+			<span v-if="user.color.toLowerCase() == 'blue'">is blue</span>
+			<span v-else>is<strong>NOT</strong>blue</span>
+		</p>
+		<p>
+			Your pets are:
+			<ol v-if="user.pets && user.pets.length">
+				<li v-for="pet in user.pets">
+					{{pet.name}} ({{pet.type}})
+				</li>
+			</ol>
+			<span v-else>You have no pets (aw!)</span>
+		</p>
+	</body>
+`);
+
+template({
+	user: {
+		name: {first: 'Joe', middle: 'H', last: 'Random'},
+		color: 'Red',
+		pets: [
+			{name: 'Pepper', type: 'Cat'},
+			{name: 'Meg', type: 'Dog'},
+		],
+	},
+}) // Compiled version of the above template
+```
+
 
 API
 ===
