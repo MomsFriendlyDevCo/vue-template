@@ -7,6 +7,15 @@ describe('Render simple structures', ()=> {
 		var str = '<div>A</div>';
 		expect(vt(str)()).to.equal(str);
 
+		str = '<div class="">A</div>';
+		expect(vt(str)()).to.equal('<div>A</div>', 'remove empty class attribute #1');
+
+		str = '<div class>A</div>';
+		expect(vt(str)()).to.equal('<div>A</div>', 'remote empty class attribute #2');
+
+		str = '<div class="strong" custom1="custom1Val" custom2>A</div>';
+		expect(vt(str)()).to.equal(str);
+
 		str = '<div><span>A</span>B<span>C</span></div>';
 		expect(vt(str)().replace(/\s*B\s*/, 'B')).to.equal(str);
 
@@ -36,7 +45,7 @@ describe('Render simple structures', ()=> {
 			'<body>'
 				+ 'Hello {{user.name.first}} {{user.name.last}}<br/>'
 				+ 'Your favourite color<span v-if="user.color.toLowerCase() == \'blue\'">is blue</span><span v-else>is<strong>NOT</strong>blue</span><br/>'
-				+ 'Your pets are:<ol><li v-for="pet in user.pets">{{pet.name}} ({{pet.type}})</li></ol>'
+				+ 'Your pets are:<ol class="list-unordered pets"><li v-for="pet in user.pets">{{pet.name}} ({{pet.type}})</li></ol>'
 			+ '</body>',
 		)({
 			user: {
@@ -51,7 +60,7 @@ describe('Render simple structures', ()=> {
 			'<body>'
 				+ 'Hello Joe Random <br/> '
 				+ 'Your favourite color <span>is <strong>NOT</strong> blue</span> <br/> '
-				+ 'Your pets are: <ol><li>Pepper (Cat)</li> <li>Meg (Dog)</li></ol>'
+				+ 'Your pets are: <ol class="list-unordered pets"><li>Pepper (Cat)</li> <li>Meg (Dog)</li></ol>'
 			+ '</body>'
 		);
 	});

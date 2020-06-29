@@ -15,14 +15,15 @@ module.exports = function(html, options) {
 			// If tag is empty but is a valid self-closing tag return the minimal element
 			if ((!children || !children.length) && settings.selfClosingTags.has(tag)) return `<${tag}/>`;
 
+			var domAttrs = [
+				attr.staticClass ? `class="${attr.staticClass}"` : null, // Copy class definition
+				...Object.keys(attr.attrs || {}) // Copy static attributes
+					.map(key => attr.attrs[key] ? `${key}="${attr.attrs[key]}"` : key),
+			].filter(i => i) // Remove duds
+
 			return '<'
 				+ tag
-				+ (_.isEmpty(attr)
-					? ''
-					: ' ' + Object.keys(attr)
-						.map(k => `${k}="${attr[k]}"`)
-						.join(' ')
-				)
+				+ (domAttrs.length ? ' ' + domAttrs.join(' ') : '')
 			+ '>'
 				+ (children || []).join(' ')
 			+ '</' + tag + '>';
