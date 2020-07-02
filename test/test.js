@@ -16,10 +16,29 @@ describe('Render simple structures', ()=> {
 		str = '<div class="strong" custom1="custom1Val" custom2>A</div>';
 		expect(vt(str)()).to.equal(str);
 
+		str = '<img src="imgSrc1"/>';
+		expect(vt(str)()).to.equal(str);
+
+		str = '<img :src="iSrc"/>';
+		expect(vt(str)({iSrc: 'imgSrc2'})).to.equal('<img src="imgSrc2"/>');
+
 		str = '<div><span>A</span>B<span>C</span></div>';
 		expect(vt(str)().replace(/\s*B\s*/, 'B')).to.equal(str);
 
 		expect(vt('<div>A<br/>B</div>')()).to.equal('<div>A <br/> B</div>');
+	});
+
+	it('should render the meta "class" attribute', ()=> {
+		expect(vt('<a class="simple">1</a>')({})).to.equal('<a class="simple">1</a>');
+		expect(vt('<a class="simple1 simple2">1</a>')({})).to.equal('<a class="simple1 simple2">1</a>');
+		expect(vt('<a :class="\'simple2\'">1</a>')({})).to.equal('<a class="simple2">1</a>');
+		expect(vt('<a :class="lookup">1</a>')({lookup: 'Lookup!'})).to.equal('<a class="Lookup!">1</a>');
+		expect(vt('<a :class="aLookup">1</a>')({aLookup: ['a1', 'a2', 'a3']})).to.equal('<a class="a1 a2 a3">1</a>');
+		expect(vt('<a :class="[a, b, c]">1</a>')({a: 'a1', b: 'b1', c: 'c1'})).to.equal('<a class="a1 b1 c1">1</a>');
+		expect(vt('<a :class="tern ? \'a1\' : \'b1\'">1</a>')({tern: true})).to.equal('<a class="a1">1</a>');
+		expect(vt('<a :class="tern ? \'a1\' : \'b1\'">1</a>')({tern: false})).to.equal('<a class="b1">1</a>');
+		expect(vt('<a :class="[\'a1\', b, c ? \'c1\' : \'c2\']">1</a>')({b: 'b1', c: true})).to.equal('<a class="a1 b1 c1">1</a>');
+		expect(vt('<a :class="{a1: true, b1: false, c1: true || false}">1</a>')({})).to.equal('<a class="a1 c1">1</a>');
 	});
 
 	it('should render simple mustaches ({{val}})', ()=> {
