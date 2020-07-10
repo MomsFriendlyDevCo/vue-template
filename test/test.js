@@ -57,6 +57,7 @@ describe('Render simple structures', ()=> {
 
 	it('should support iteration (v-for)', ()=> {
 		expect(vt('<ol><li v-for="i in l">{{i}}</li></ol>')({l: [1, 2, 3]})).to.equal('<ol><li>1</li> <li>2</li> <li>3</li></ol>');
+		expect(vt('<ol><li v-for="i in l">{{i}}</li><li>foo</li></ol>')({l: [1, 2, 3]})).to.equal('<ol><li>1</li> <li>2</li> <li>3</li> <li>foo</li></ol>');
 	});
 
 	it('should render a complex example', ()=> {

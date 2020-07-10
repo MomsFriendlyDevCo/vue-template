@@ -41,7 +41,7 @@ module.exports = function(html, options) {
 					+ tag
 					+ (domAttrs.length ? ' ' + domAttrs.join(' ') : '')
 				+ '>'
-					+ (children || []).join(' ')
+					+ ( isArray(children) ? children.flat(Infinity).join(' ') : '' )
 				+ '</' + tag + '>';
 			}
 		},
