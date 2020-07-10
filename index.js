@@ -49,6 +49,7 @@ module.exports = function(html, options) {
 		_m: offset => template.staticRenderFns[offset].call(context), // Render a sub-module by offset
 		_l: (list, func) => list.map(func), // Render list (really a map operation)
 		_s: value => value, // Lookup value from context
+		_e: ()=> {}, // Set v-else to do nothing by default
 	};
 
 	return data => template.render.call({

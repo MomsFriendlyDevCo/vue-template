@@ -53,6 +53,7 @@ describe('Render simple structures', ()=> {
 		expect(vt('<div>=<span v-if="a == 1">1</span><span v-else-if="a == 2">2</span><span v-else>3</span></div>')({a: 1})).to.equal('<div>= <span>1</span></div>');
 		expect(vt('<div>=<span v-if="a == 1">1</span><span v-else-if="a == 2">2</span><span v-else>3</span></div>')({a: 2})).to.equal('<div>= <span>2</span></div>');
 		expect(vt('<div>=<span v-if="a == 1">1</span><span v-else-if="a == 2">2</span><span v-else>3</span></div>')({a: 3})).to.equal('<div>= <span>3</span></div>');
+		expect(vt('<div><span v-if="a == 7">Y</span></div>')({a: 3})).to.not.equal('<div><span>Y</span></div>');
 	});
 
 	it('should support iteration (v-for)', ()=> {
