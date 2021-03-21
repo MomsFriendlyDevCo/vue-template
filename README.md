@@ -13,9 +13,8 @@ template({name: 'Joe'}); //= "<div>Hello Joe</div>"
 template({name: 'Jane'}); //= "<div>Hello Jane</div>"
 ```
 
+
 All built in Vue directives are supported:
-
-
 
 ```javascript
 var vueTemplate = require('@momsfriendlydevco/vue-template');
@@ -51,6 +50,38 @@ template({
 	},
 }) // Compiled version of the above template
 ```
+
+
+Support table
+-------------
+The below is a non-exhaustive list of templating functions that are supported.
+If you find a Vue feature that isn't listed below please file an issue or add a [test](./test) for it.
+
+
+| Feature     | Supported          | Notes        |
+|-------------|--------------------|--------------|
+| `v-if`      | :white_check_mark: |              |
+| `v-on`      | :no_entry_sign:    | `events`     |
+| `v-for`     | :white_check_mark: |              |
+| `v-pre`     | ?                  |              |
+| `v-bind`    | ?                  |              |
+| `v-else`    | :white_check_mark: |              |
+| `v-else-if` | :white_check_mark: |              |
+| `v-html`    | ?                  |              |
+| `v-once`    | :no_entry_sign:    | `events`     |
+| `v-show`    | ?                  |              |
+| `v-slot`    | :no_entry_sign:    | `components` |
+| `v-text`    | ?                  |              |
+| `v-cloak`   | ?                  |              |
+| `v-model`   | ?                  |              |
+| `:class`    | :white_check_mark: | `classes`    |
+| `:style`    | ?                  |              |
+
+
+**Notes:**
+* `classes` - All styles of class binding are supported (e.g. static, lookup, array lookup, objects, mixed)
+* `components` - At this point this module does not support custom components
+* `events` - Events are entirely unsupported as this is a "one-pass" templator that returns HTML and does not react to async states
 
 
 API
