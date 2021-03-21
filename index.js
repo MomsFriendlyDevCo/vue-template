@@ -57,3 +57,5 @@ module.exports = function(html, options) {
 		...data,
 	});
 };
+
+process.env.VUE_ENV = 'server'; // Set rendering as server-side so tags like <style/> are correctly passed through

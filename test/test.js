@@ -86,4 +86,23 @@ describe('Render simple structures', ()=> {
 		);
 	});
 
+	it('should handle <style/> tags', ()=> {
+		expect(vt(''
+			+ '<html>'
+				+ '<head>'
+					+ '<style>'
+						+ '.person {color: blue}'
+					+ '</style>'
+				+ '</head>'
+				+ '<body>'
+					+ 'Hello <span class="person">{{user.name.first}} {{user.name.last}}</span>'
+				+ '</body>'
+			+ '</html>'
+		)({
+			user: {
+				name: {first: 'Joe', middle: 'H', last: 'Random'},
+			},
+		})).to.match(/<style>.*<span class="person">Joe Random<\/span>/)
+	});
+
 });
