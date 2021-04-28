@@ -93,11 +93,21 @@ Compile raw HTML into a Vue render function and return a template wrapper functi
 
 Options:
 
-| Option            | Type  | Default  | Description                                                                     |
-|-------------------|-------|----------|---------------------------------------------------------------------------------|
-| `selfClosingTags` | `Set` | See code | A Set object initialized with all tags which support the HTML self closing spec |
+| Option            | Type       | Default          | Description                                                                                             |
+|-------------------|------------|------------------|---------------------------------------------------------------------------------------------------------|
+| `context`         | `Object`   | `{}`             | Additional vue-template-compiler context to inject                                                      |
+| `selfClosingTags` | `Set`      | See code         | A Set object initialized with all tags which support the HTML self closing spec                         |
+| `async`           | `Boolean`  | `false`          | Treat all functions as potencially async, the template function is a promise instead of a string return |
+| `keySeralize`     | `Function` | `JSON.stringify` | How to handle template seralization                                                                     |
 
 
 template(data)
 --------------
 Takes an object of context data to use when rendering, renders the template and returns the HTML output.
+This can be a Promise if `{async: true}` in the initial call.
+
+**Notes on using Aysnc**:
+* Promises are waited on - If a function returns an async / promisable that function is waited for before re-rendering with the result return
+* Functions are wrapped to provide this functionality - All input data functions are wrapped to handle this functionality
+* All functions are assumed to be "pure" - calling the same function with the same arguments will only run once and return the first result only
+* Promises are evaluated to one level only - A promise returning another promise will throw rather than render

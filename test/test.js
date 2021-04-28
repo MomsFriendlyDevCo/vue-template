@@ -105,4 +105,34 @@ describe('Render simple structures', ()=> {
 		})).to.match(/<style>.*<span class="person">Joe Random<\/span>/)
 	});
 
+
+	it('should handle functions', ()=> {
+		expect(vt('<p>Hello {{caps(name)}}</p>')({
+			name: 'Matt',
+			caps: str => str.toUpperCase(),
+		})).to.equal('<p>Hello MATT</p>');
+	});
+
+	it('should async handle functions', ()=>
+		vt.async('<p>Hello {{decaps(name)}}</p>')({
+			name: 'Matt',
+			decaps: str => new Promise(resolve => setTimeout(()=> resolve(str.toLowerCase()), 100)),
+		})
+			.then(res => expect(res).to.equal('<p>Hello matt</p>'))
+	);
+
+	it('should handle async promise chains', ()=>
+		vt.async('<p>Hello {{caps(name)}}</p>')({
+			name: 'Matt',
+			caps: str => new Promise(resolve =>
+				setTimeout(()=>
+					new Promise(resolve2 =>
+						setTimeout(()=> resolve2(str.toLowerCase()), 100)
+					).then(resolve)
+				, 100)
+			),
+		})
+			.then(res => expect(res).to.equal('<p>Hello matt</p>'))
+	);
+
 });
