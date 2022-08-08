@@ -3,7 +3,7 @@ var vueCompiler = require('vue-template-compiler');
 
 var isArray = input => typeof input == 'object' && Object.prototype.toString.call(input) == '[object Array]';
 
-var VueTemplate = module.exports = function(html, options) {
+var VueTemplate = function(html, options) {
 	var settings = {
 		context: {},
 		selfClosingTags: new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']), // Set sourced from http://xahlee.info/js/html5_non-closing_tag.html
@@ -12,7 +12,18 @@ var VueTemplate = module.exports = function(html, options) {
 		...options,
 	};
 
+	// Set rendering as server-side so tags like <style/> are correctly passed through
+	var oldVueEnv = process.env.VUE_ENV;
+	process.env.VUE_ENV = 'server';
+
 	var template = vueCompiler.compileToFunctions(html);
+
+	if (oldVueEnv === undefined) {
+		delete process.env.VUE_ENV;
+	} else {
+		process.env.VUE_ENV = oldVueEnv;
+	}
+
 	var context = {
 		_c: (tag, attr, children) => { // Compute DOM element
 			// Argument mangling
@@ -110,4 +121,4 @@ VueTemplate.async = (html, options) =>
 		...options,
 	})
 
-process.env.VUE_ENV = 'server'; // Set rendering as server-side so tags like <style/> are correctly passed through
+module.exports = VueTemplate;

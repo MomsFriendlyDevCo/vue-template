@@ -87,6 +87,7 @@ describe('Render simple structures', ()=> {
 	});
 
 	it('should handle <style/> tags', ()=> {
+		process.env.VUE_ENV = 'client';
 		expect(vt(''
 			+ '<html>'
 				+ '<head>'
@@ -103,7 +104,34 @@ describe('Render simple structures', ()=> {
 				name: {first: 'Joe', middle: 'H', last: 'Random'},
 			},
 		})).to.match(/<style>.*<span class="person">Joe Random<\/span>/)
+
+		expect(process.env).to.have.property('VUE_ENV', 'client');
 	});
+
+	it('should handle <style/> tags (async)', ()=> Promise.resolve()
+		.then(()=> process.env.VUE_ENV = 'client')
+		.then(()=> vt.async(''
+			+ '<html>'
+				+ '<head>'
+					+ '<style>'
+						+ '.person {color: blue}'
+					+ '</style>'
+				+ '</head>'
+				+ '<body>'
+					+ 'Hello <span class="person">{{user.name.first}} {{user.name.last}}</span>'
+				+ '</body>'
+			+ '</html>',
+		))
+		.then(template => template({
+			user: {
+				name: {first: 'Joe', middle: 'H', last: 'Random'},
+			},
+		}))
+		.then(content => {
+			expect(content).to.match(/<style>.*<span class="person">Joe Random<\/span>/);
+			expect(process.env).to.have.property('VUE_ENV', 'client');
+		})
+	);
 
 
 	it('should handle functions', ()=> {
