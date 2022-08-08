@@ -1,6 +1,6 @@
 {
   "name": "@momsfriendlydevco/vue-template",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Compile a simple HTML string via Vue style templates",
   "main": "index.js",
   "scripts": {
