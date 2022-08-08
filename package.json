@@ -22,11 +22,11 @@
   },
   "homepage": "https://github.com/MomsFriendlyDevCo/vue-template#readme",
   "devDependencies": {
-    "chai": "^4.3.4",
-    "mocha": "^8.3.2"
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0"
   },
   "dependencies": {
     "lodash": "^4.17.21",
-    "vue-template-compiler": "^2.6.12"
+    "vue-template-compiler": "^2.7.8"
   }
 }
