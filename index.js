@@ -9,19 +9,35 @@ var VueTemplate = function(html, options) {
 		selfClosingTags: new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']), // Set sourced from http://xahlee.info/js/html5_non-closing_tag.html
 		async: false,
 		keySerialize: JSON.stringify,
+		fixOmittedStyle: true,
+		fixStrippedStyle: true,
+		onPreTemplate: (template, settings) => {
+			return settings.fixStrippedStyle
+				? template.replace(/(?!:)style="(.*?)"/g, '_STYLE="$1"')
+				: template
+		},
+		onPostGenerate: (content, settings) => {
+			return settings.fixStrippedStyle
+				? content.replace(/_STYLE="(.*?)"/g, 'style="$1"')
+				: content
+		},
 		...options,
 	};
 
 	// Set rendering as server-side so tags like <style/> are correctly passed through
-	var oldVueEnv = process.env.VUE_ENV;
-	process.env.VUE_ENV = 'server';
+	if (settings.fixOmittedStyle) {
+		var oldVueEnv = process.env.VUE_ENV;
+		process.env.VUE_ENV = 'server';
+	}
 
-	var template = vueCompiler.compileToFunctions(html);
+	var template = vueCompiler.compileToFunctions(settings.onPreTemplate(html, settings));
 
-	if (oldVueEnv === undefined) {
-		delete process.env.VUE_ENV;
-	} else {
-		process.env.VUE_ENV = oldVueEnv;
+	if (settings.fixOmittedStyle) {
+		if (oldVueEnv === undefined) {
+			delete process.env.VUE_ENV;
+		} else {
+			process.env.VUE_ENV = oldVueEnv;
+		}
 	}
 
 	var context = {
@@ -71,10 +87,10 @@ var VueTemplate = function(html, options) {
 
 	return data => {
 		if (!settings.async) { // Sync mode - return simple string
-			return template.render.call({
+			return settings.onPostGenerate(template.render.call({
 				...context,
 				...data,
-			});
+			}), settings)
 		} else { // Async mode - eval as Promise and return {{{
 			return Promise.resolve() // Start promise chain
 				.then(()=> void template.render.call({ // Call render and ignore initial result to populate _promises
@@ -110,6 +126,7 @@ var VueTemplate = function(html, options) {
 						}
 					}),
 				}))
+				.then(content => settings.onPostGenerate(content, settings))
 			// }}}
 		}
 	};

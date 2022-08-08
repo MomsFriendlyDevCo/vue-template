@@ -93,12 +93,20 @@ Compile raw HTML into a Vue render function and return a template wrapper functi
 
 Options:
 
-| Option            | Type       | Default          | Description                                                                                             |
-|-------------------|------------|------------------|---------------------------------------------------------------------------------------------------------|
-| `context`         | `Object`   | `{}`             | Additional vue-template-compiler context to inject                                                      |
-| `selfClosingTags` | `Set`      | See code         | A Set object initialized with all tags which support the HTML self closing spec                         |
-| `async`           | `Boolean`  | `false`          | Treat all functions as potencially async, the template function is a promise instead of a string return |
-| `keySeralize`     | `Function` | `JSON.stringify` | How to handle template seralization                                                                     |
+| Option             | Type       | Default          | Description                                                                                             |
+|--------------------|------------|------------------|---------------------------------------------------------------------------------------------------------|
+| `context`          | `Object`   | `{}`             | Additional vue-template-compiler context to inject                                                      |
+| `selfClosingTags`  | `Set`      | See code         | A Set object initialized with all tags which support the HTML self closing spec                         |
+| `async`            | `Boolean`  | `false`          | Treat all functions as potencially async, the template function is a promise instead of a string return |
+| `keySeralize`      | `Function` | `JSON.stringify` | How to handle template seralization                                                                     |
+| `fixOmittedStyle`  | `Boolean`  | `true`           | Fix the base Vue-templator from removing all `<style/>` blocks                                          |
+| `fixStrippedStyle` | `Boolean`  | `true`           | Fix the base Vue-templator stripping the `style` attribute                                              |
+| `onPreTemplate`    | `Function` | `(tHtml, opts)`  | Function to mangle the incomming template before processing                                             |
+| `onPostGenerate`   | `Function` | `(cHtml, opts)`  | Function to mangle outgoing generated content                                                           |
+
+**Notes:**
+
+* The `onPreTemplate` + `onPostGenerate` functions defaults to fixing the `style` attribute if `fixStrippedStyle` is enabled
 
 
 template(data)

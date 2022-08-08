@@ -88,14 +88,14 @@ describe('Render simple structures', ()=> {
 
 	it('should handle <style/> tags', ()=> {
 		process.env.VUE_ENV = 'client';
-		expect(vt(''
+		var content = vt(''
 			+ '<html>'
 				+ '<head>'
 					+ '<style>'
 						+ '.person {color: blue}'
 					+ '</style>'
 				+ '</head>'
-				+ '<body>'
+				+ '<body style="background: white">'
 					+ 'Hello <span class="person">{{user.name.first}} {{user.name.last}}</span>'
 				+ '</body>'
 			+ '</html>'
@@ -103,12 +103,17 @@ describe('Render simple structures', ()=> {
 			user: {
 				name: {first: 'Joe', middle: 'H', last: 'Random'},
 			},
-		})).to.match(/<style>.*<span class="person">Joe Random<\/span>/)
+		});
+
+		expect(content).to.match(/<style>.*<span class="person">Joe Random<\/span>/)
+
+		var bodyDef = content.replace(/.*(<body.*?>).*/, '$1');
+		expect(bodyDef).to.equal('<body style="background: white">');
 
 		expect(process.env).to.have.property('VUE_ENV', 'client');
 	});
 
-	it('should handle <style/> tags (async)', ()=> Promise.resolve()
+	it('should handle <style/> tags + attrs (async)', ()=> Promise.resolve()
 		.then(()=> process.env.VUE_ENV = 'client')
 		.then(()=> vt.async(''
 			+ '<html>'
@@ -117,7 +122,7 @@ describe('Render simple structures', ()=> {
 						+ '.person {color: blue}'
 					+ '</style>'
 				+ '</head>'
-				+ '<body>'
+				+ '<body style="background: white">'
 					+ 'Hello <span class="person">{{user.name.first}} {{user.name.last}}</span>'
 				+ '</body>'
 			+ '</html>',
@@ -129,6 +134,9 @@ describe('Render simple structures', ()=> {
 		}))
 		.then(content => {
 			expect(content).to.match(/<style>.*<span class="person">Joe Random<\/span>/);
+			var bodyDef = content.replace(/.*(<body.*?>).*/, '$1');
+			expect(bodyDef).to.equal('<body style="background: white">');
+
 			expect(process.env).to.have.property('VUE_ENV', 'client');
 		})
 	);
