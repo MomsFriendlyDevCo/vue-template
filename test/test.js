@@ -171,4 +171,15 @@ describe('Render simple structures', ()=> {
 			.then(res => expect(res).to.equal('<p>Hello matt</p>'))
 	);
 
+	it('should handle errors (mismatched tags)', ()=> {
+		expect(()=> vt('<p>Hello')).to.throw;
+		expect(()=> vt('<div>Hello</p>')).to.throw;
+	});
+
+	it('should handle errors (undefined variables)', ()=> {
+		expect(()=> vt('<p>Hello {{undef}}</pre>')).to.throw;
+		expect(()=> vt('<div v-if="thing">Hello</div>')).to.throw;
+		expect(()=> vt('<div v-for="stuff in everything">Hello</div>')).to.throw;
+	});
+
 });
