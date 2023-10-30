@@ -5,12 +5,12 @@ Compile a simple HTML string via Vue style templates.
 This package exports a single function to compile a Vue-style template and return a render function which can then be provided with data.
 
 ```javascript
-var vueTemplate = require('@momsfriendlydevco/vue-template');
+import vueTemplate from '@momsfriendlydevco/vue-template';
 
-var template = vueTemplate('<div>Hello {{name}}</div>');
+let template = vueTemplate('<div>Hello {{name}}</div>');
 
-template({name: 'Joe'}); //= "<div>Hello Joe</div>"
-template({name: 'Jane'}); //= "<div>Hello Jane</div>"
+await template({name: 'Joe'}); //~= "<div>Hello Joe</div>"
+await template({name: 'Jane'}); //~= "<div>Hello Jane</div>"
 ```
 
 
@@ -48,7 +48,7 @@ template({
 			{name: 'Meg', type: 'Dog'},
 		],
 	},
-}) // Compiled version of the above template
+}) //~= Compiled version of the above template
 ```
 
 
@@ -87,35 +87,12 @@ If you find a Vue feature that isn't listed below please file an issue or add a 
 API
 ===
 
-vueTemplate(html, options)
----------------------------
+vueTemplate(html)
+-----------------
 Compile raw HTML into a Vue render function and return a template wrapper function. See `template(data)` for documentation on how to use the templator return.
-
-Options:
-
-| Option             | Type       | Default          | Description                                                                                             |
-|--------------------|------------|------------------|---------------------------------------------------------------------------------------------------------|
-| `context`          | `Object`   | `{}`             | Additional vue-template-compiler context to inject                                                      |
-| `selfClosingTags`  | `Set`      | See code         | A Set object initialized with all tags which support the HTML self closing spec                         |
-| `async`            | `Boolean`  | `false`          | Treat all functions as potencially async, the template function is a promise instead of a string return |
-| `keySeralize`      | `Function` | `JSON.stringify` | How to handle template seralization                                                                     |
-| `fixOmittedStyle`  | `Boolean`  | `true`           | Fix the base Vue-templator from removing all `<style/>` blocks                                          |
-| `fixStrippedStyle` | `Boolean`  | `true`           | Fix the base Vue-templator stripping the `style` attribute                                              |
-| `onPreTemplate`    | `Function` | `(tHtml, opts)`  | Function to mangle the incomming template before processing                                             |
-| `onPostGenerate`   | `Function` | `(cHtml, opts)`  | Function to mangle outgoing generated content                                                           |
-
-**Notes:**
-
-* The `onPreTemplate` + `onPostGenerate` functions defaults to fixing the `style` attribute if `fixStrippedStyle` is enabled
 
 
 template(data)
 --------------
 Takes an object of context data to use when rendering, renders the template and returns the HTML output.
-This can be a Promise if `{async: true}` in the initial call.
-
-**Notes on using Aysnc**:
-* Promises are waited on - If a function returns an async / promisable that function is waited for before re-rendering with the result return
-* Functions are wrapped to provide this functionality - All input data functions are wrapped to handle this functionality
-* All functions are assumed to be "pure" - calling the same function with the same arguments will only run once and return the first result only
-* Promises are evaluated to one level only - A promise returning another promise will throw rather than render
+All functions are automatically converted into Vue component methods.
